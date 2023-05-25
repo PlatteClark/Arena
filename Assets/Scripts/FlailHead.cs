@@ -33,9 +33,10 @@ public class FlailHead : MonoBehaviour
             timer -= Time.deltaTime;
             if(timer > 0)
             {
-                rb.AddForce(handle.transform.up * handlerb.velocity.magnitude * 2);
-                rb.AddForce(Vector3.forward * handlerb.velocity.magnitude);
+                rb.AddForce(handle.transform.up * handlerb.velocity.sqrMagnitude);
+                rb.AddForce(Vector3.forward * handlerb.velocity.sqrMagnitude);
             }
         }
+        
     }
 }
