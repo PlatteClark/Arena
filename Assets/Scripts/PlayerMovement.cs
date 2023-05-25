@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 public class PlayerMovment : MonoBehaviour
 {
     [SerializeField] Transform weapon;
+    [SerializeField] FlailHead flailHead;
 
     [SerializeField] float rotationSpeed = 75;
     [SerializeField] float speed = 3;
@@ -34,7 +35,16 @@ public class PlayerMovment : MonoBehaviour
 
         weapon.localPosition = new Vector3(((mousePosition.x - 0.5f) * 2), (mousePosition.y + 1), 1);
 
-        weapon.localRotation = GetWeaponDirection(mousePosition);
+        if(Input.GetMouseButton(0))
+        {
+            weapon.localRotation = GetWeaponDirection(mousePosition);
+            flailHead.swing = true;
+        }
+        else
+        {
+            weapon.localRotation = Quaternion.Slerp(weapon.localRotation, Quaternion.AngleAxis(90, Vector3.right), 5 * Time.deltaTime);
+            flailHead.swing = false;
+        }
 
         // Check if the mouse is touching the edge of the screen.
         if (mousePosition.x < 0) { transform.Rotate(0, -rotationSpeed * Time.deltaTime, 0); }
