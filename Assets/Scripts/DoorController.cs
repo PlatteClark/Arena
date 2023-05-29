@@ -44,12 +44,12 @@ public class DoorController : MonoBehaviour
         if(keys.Contains(keyRequired))
         {
             animator?.SetTrigger("HasKey");
-            audioSource.PlayOneShot(sounds.ElementAt(1).Value);
+            audioSource?.PlayOneShot(sounds.ElementAt(1).Value);
             messageText.text = messages[1];
         }
         else
         {
-            audioSource.PlayOneShot(sounds.ElementAt(0).Value);
+            audioSource?.PlayOneShot(sounds.ElementAt(0).Value);
             messageText.text = messages[0];
         }
 

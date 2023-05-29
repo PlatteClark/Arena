@@ -97,7 +97,7 @@ public class PlayerMovment : MonoBehaviour
 
         // Check if the mouse is touching the edge of the screen.
         if (mousePosition.x < 0) { rb.transform.Rotate(0, -rotationSpeed * Time.deltaTime, 0); }
-        if (mousePosition.x > 1) { rb.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0); }
+        else if (mousePosition.x > 1) { rb.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0); }
 
     }
 

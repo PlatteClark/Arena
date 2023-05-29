@@ -14,6 +14,8 @@ public class KeyController : MonoBehaviour
     [SerializeField] private Interactable interactable;
     [SerializeField] private AudioSource? audioSource = null;
     [SerializeField] TMP_Text messageText;
+    [SerializeField] GameObject interactText;
+    
 
     private void Start()
     {
@@ -34,11 +36,15 @@ public class KeyController : MonoBehaviour
         messageText.text = "Picked up " + keyName;
         audioSource.Play();
 
-        gameObject.GetComponentInChildren<Renderer>().enabled = false;
+        Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer renderer in renderers) 
+        {
+            renderer.enabled = false;
+        }
 
         StartCoroutine(HideTextAfterTime(4.0f));
     }
-
 
     private void OnPlayerLeftTriggerArea()
     {

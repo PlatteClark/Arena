@@ -31,7 +31,7 @@ public class Interactable : MonoBehaviour
         interactionPrompt.SetActive(false);
     }
 
-    private void OnTriggerEnter(Collider collision)
+    protected virtual void OnTriggerEnter(Collider collision)
     {
         if (collision.CompareTag("Player"))
         {
