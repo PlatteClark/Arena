@@ -11,11 +11,35 @@ public class PlayerMovment : MonoBehaviour
 
     [SerializeField] float rotationSpeed = 75;
     [SerializeField] float speed = 3;
+    [SerializeField] float jumpForce = 5f;
+    private bool isGrounded = true;
 
-    [SerializeField] Rigidbody rb;
+    public List<string> dungeonKeys;
+
+    //[SerializeField] Rigidbody weaponRb;
+    private Rigidbody rb;
+    private Interactable interactable;
+
+    [SerializeField] AudioClip[] stepSounds; 
+    [SerializeField] AudioClip[] waterStepSounds; 
+    [SerializeField] float stepInterval = 0.5f; 
+
+    private AudioSource audioSource;
+    private bool isMoving = false;
+    private bool isCoroutinePlaying = false;
+    private bool isInWater = false;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+
+        audioSource = GetComponent<AudioSource>();
+        // Make sure AudioSource exists
+        if (audioSource == null)
+        {
+            Debug.LogError("No AudioSource component found, either you or I are retarded.");
+        }
+
     }
 
     void Update()
@@ -27,8 +51,33 @@ public class PlayerMovment : MonoBehaviour
 
         // Move the player in the direction of the input.
         Vector3 movement = new Vector3(horizontalInput, 0, verticalInput);
-        movement *= speed * Time.deltaTime;
-        transform.Translate(movement);
+        movement = transform.TransformDirection(movement);
+        movement = movement.normalized * speed * Time.deltaTime;
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+            StartCoroutine(JumpCoolDown());
+        }
+
+        rb.MovePosition(rb.position + movement);
+        isMoving = movement.magnitude > 0;
+
+        // player move = make sound. player no move = NO FETCHING SOUND
+        if (isMoving && !isCoroutinePlaying)
+        {
+            StartCoroutine(PlayStepSounds());
+        }
+
+        //  Interact with objects
+        if (Input.GetKeyDown(KeyCode.E) && interactable != null)
+        {
+            if (interactable.Interact(dungeonKeys))
+            {
+                // Never did anything with this, but this checks if interaction was successful
+            }
+        }
 
         // Get the mouse position in world space.
         Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
@@ -47,8 +96,8 @@ public class PlayerMovment : MonoBehaviour
         }
 
         // Check if the mouse is touching the edge of the screen.
-        if (mousePosition.x < 0) { transform.Rotate(0, -rotationSpeed * Time.deltaTime, 0); }
-        if (mousePosition.x > 1) { transform.Rotate(0, rotationSpeed * Time.deltaTime, 0); }
+        if (mousePosition.x < 0) { rb.transform.Rotate(0, -rotationSpeed * Time.deltaTime, 0); }
+        if (mousePosition.x > 1) { rb.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0); }
 
     }
 
@@ -106,6 +155,64 @@ public class PlayerMovment : MonoBehaviour
         }
         
         return Quaternion.Slerp(weapon.localRotation, desiredRotation, Time.deltaTime * 8);
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.CompareTag("Interactable"))
+        {
+            interactable = collision.GetComponent<Interactable>();
+        }
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+        if (collision.gameObject.CompareTag("Water"))
+        {
+            isInWater = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if (collision.CompareTag("Interactable"))
+        {
+            interactable = null;
+        }
+        if (collision.gameObject.CompareTag("Water"))
+        {
+            isInWater = false;
+        }
+    }
+
+    IEnumerator JumpCoolDown()
+    {
+        yield return new WaitForSeconds(2);
+        isGrounded = true;
+    }
+
+    IEnumerator PlayStepSounds()
+    {
+        isCoroutinePlaying = true;
+        while (isMoving)
+        {
+            // Check if the player is in the water.
+            if (isInWater)
+            {
+                // Play water step sound.
+                AudioClip waterClip = waterStepSounds[UnityEngine.Random.Range(0, waterStepSounds.Length)];
+                audioSource.PlayOneShot(waterClip);
+            }
+            else
+            {
+                // Play regular step sound.
+                AudioClip clip = stepSounds[UnityEngine.Random.Range(0, stepSounds.Length)];
+                audioSource.PlayOneShot(clip);
+            }
+
+            yield return new WaitForSeconds(stepInterval);
+        }
+        isCoroutinePlaying = false;
     }
 
 }

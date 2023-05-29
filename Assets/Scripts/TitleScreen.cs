@@ -19,7 +19,7 @@ public class TitleScreen : MonoBehaviour
 
     private void OnPlayButtonClick()
     {
-        SceneManager.LoadScene("PlayGround");
+        SceneManager.LoadScene("Prison");
     }
 
     private void OnLoadButtonClick()
