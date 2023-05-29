@@ -32,6 +32,13 @@ public class Enemy : MonoBehaviour
         if (target != null)
         {
             agent.SetDestination(target.position);
+            if(agent.remainingDistance <= agent.stoppingDistance)
+            {
+                Quaternion look = Quaternion.LookRotation((target.position - transform.position).normalized);
+                look.x = 0;
+                look.z = 0;
+                transform.rotation = look;
+            }
         }
     }
 
