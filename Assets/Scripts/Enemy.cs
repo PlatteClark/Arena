@@ -16,12 +16,37 @@ public class Enemy : MonoBehaviour
     [SerializeField] float radius;
     [SerializeField] float angle;
     [SerializeField] Transform raycastTransform;
-    
+
+    [Header("AI")]
+    [SerializeField] float attackTime;
+    [SerializeField] float idleTime;
+    [SerializeField] float wanderDistance;
+    [SerializeField] Animator animator;
+    [SerializeField] float wanderSpeed;
+    [SerializeField] float chaseSpeed;
+
+
+    bool inRange = false;
+    float attackTimer;
+    float idleTimer;
+
+    enum State
+    {
+        WANDER,
+        IDLE,
+        ATTACK,
+        CHASE
+    }
+
+    State state = State.WANDER;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
+        attackTimer = attackTime;
+        idleTimer = idleTime;
     }
 
     // Update is called once per frame
@@ -29,17 +54,93 @@ public class Enemy : MonoBehaviour
     {
         Perceive();
 
-        if (target != null)
+        Debug.Log(state.ToString());
+
+        switch(state)
         {
-            agent.SetDestination(target.position);
-            if(agent.remainingDistance <= agent.stoppingDistance)
-            {
-                Quaternion look = Quaternion.LookRotation((target.position - transform.position).normalized);
-                look.x = 0;
-                look.z = 0;
-                transform.rotation = look;
-            }
+            case State.WANDER:
+                if(target != null)
+                {
+                    state = State.CHASE;
+                }
+                else
+                {
+                    agent.speed = wanderSpeed;
+
+                    idleTimer -= Time.deltaTime;
+
+                    if (agent.destination == null || agent.remainingDistance <= agent.stoppingDistance)
+                    {
+                        Utilities.RandomPoint(transform.position, wanderDistance, out Vector3 dest);
+
+                        agent.SetDestination(dest);
+                    }
+
+                    if (idleTimer <= 0)
+                    {
+                        state = State.IDLE;
+
+                        agent.isStopped = true;
+
+                        animator.SetTrigger("idleInterrupt");
+                    }
+                    
+                }
+                break;
+            case State.IDLE:
+                if(target != null)
+                {
+                    state = State.CHASE;
+                    break;
+                }
+                if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !animator.IsInTransition(0))
+                {
+                    agent.isStopped = false;
+                    state = State.WANDER;
+                    idleTimer = idleTime;
+                }
+                break;
+            case State.CHASE:
+                if(target != null)
+                {
+                    agent.SetDestination(target.position);
+                    agent.speed = chaseSpeed;
+
+                    if(agent.remainingDistance <= agent.stoppingDistance)
+                    {
+                        state = State.ATTACK;
+                        
+                    }
+                }
+                else
+                {
+                    state = State.WANDER;
+                    idleTimer = idleTime;
+                }
+                break;
+            case State.ATTACK:
+                inRange = agent.remainingDistance <= agent.stoppingDistance;
+                animator.SetBool("inRange", inRange);
+
+                if (target != null && inRange)
+                {
+                    attackTimer -= Time.deltaTime;
+
+                    if(attackTimer <= 0)
+                    {
+                        animator.SetTrigger("attack");
+                        attackTimer = attackTime;
+                    }
+                }
+                else
+                {
+                    state = State.WANDER;
+                    idleTimer = idleTime;
+                }
+                break;
         }
+
+        animator.SetFloat("speed", agent.velocity.magnitude);
     }
 
     void Perceive()
