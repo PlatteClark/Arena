@@ -39,4 +39,20 @@ public class FlailHead : MonoBehaviour
         }
         
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Rigidbody otherRb = other.GetComponent<Rigidbody>();
+
+        if (otherRb != null)
+        {
+            Vector3 collisionPoint = other.ClosestPoint(transform.position);
+
+            Vector3 forceDirection = (collisionPoint - transform.position).normalized;
+
+            Vector3 force = forceDirection * rb.velocity.magnitude;
+
+            otherRb.AddForce(force, ForceMode.Impulse);
+        }
+    }
 }

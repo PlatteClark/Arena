@@ -119,12 +119,30 @@ public class Enemy : MonoBehaviour
                 }
                 break;
             case State.ATTACK:
-                inRange = agent.remainingDistance <= agent.stoppingDistance;
+
+                agent.isStopped = true;
+
+                if(target != null)
+                {
+                    agent.SetDestination(target.position);
+                    inRange = agent.remainingDistance <= agent.stoppingDistance;
+                    agent.isStopped = true;
+                }
+                else
+                {
+                    inRange = false;
+                }
+
                 animator.SetBool("inRange", inRange);
 
-                if (target != null && inRange)
+                if (inRange)
                 {
                     attackTimer -= Time.deltaTime;
+
+                    Vector3 look = target.position;
+                    look.y = transform.position.y;
+
+                    transform.LookAt(look);
 
                     if(attackTimer <= 0)
                     {
@@ -134,8 +152,17 @@ public class Enemy : MonoBehaviour
                 }
                 else
                 {
-                    state = State.WANDER;
-                    idleTimer = idleTime;
+                    if (target == null)
+                    {
+                        state = State.WANDER;
+                        idleTimer = idleTime;
+                        agent.isStopped = false;
+                    }
+                    else
+                    {
+                        state = State.CHASE;
+                        agent.isStopped = false;
+                    }
                 }
                 break;
         }
