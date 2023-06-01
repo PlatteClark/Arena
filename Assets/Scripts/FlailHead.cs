@@ -75,6 +75,15 @@ public class FlailHead : MonoBehaviour
             {
                 enemy.TakeDamage(rb.velocity.magnitude, force);
             }
+            else
+            {
+                Minotaur minotaur = other.gameObject.GetComponent<Minotaur>();
+
+                if (minotaur != null)
+                {
+                    minotaur.TakeDamage(rb.velocity.magnitude, force);
+                }
+            }
         }
     }
     public void PlaySounds()

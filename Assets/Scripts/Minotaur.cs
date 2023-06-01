@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class Minotaur : MonoBehaviour
 {
     NavMeshAgent agent;
     Transform target;
@@ -23,27 +20,26 @@ public class Enemy : MonoBehaviour
 
     [Header("AI")]
     [SerializeField] float attackTime;
-    [SerializeField] float idleTime;
-    [SerializeField] float wanderDistance;
+    [SerializeField] float chargeTime;
     [SerializeField] Animator animator;
-    [SerializeField] float wanderSpeed;
     [SerializeField] float chaseSpeed;
+    [SerializeField] float chargeSpeed;
 
     private AudioSource audioSource;
     [SerializeField] AudioClip[] stepSounds;
     bool inRange = false;
     float attackTimer;
-    float idleTimer;
+    float chargeTimer;
 
     enum State
     {
-        WANDER,
+        CHARGE,
         IDLE,
         ATTACK,
         CHASE
     }
 
-    State state = State.WANDER;
+    State state = State.IDLE;
 
     // Start is called before the first frame update
     void Start()
@@ -52,56 +48,41 @@ public class Enemy : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         attackTimer = attackTime;
-        idleTimer = idleTime;
+        chargeTimer = chargeTime;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Perceive();
+        if(state != State.CHARGE)
+        {
+            Perceive();
+        }
 
         switch(state)
         {
-            case State.WANDER:
-                if(target != null)
+            case State.CHARGE:
+                agent.speed = chargeSpeed;
+                agent.stoppingDistance = 0;
+                if(agent.remainingDistance <= agent.stoppingDistance)
                 {
-                    state = State.CHASE;
-                }
-                else
-                {
-                    agent.speed = wanderSpeed;
-
-                    idleTimer -= Time.deltaTime;
-
-                    if (agent.destination == null || agent.remainingDistance <= agent.stoppingDistance)
-                    {
-                        Utilities.RandomPoint(transform.position, wanderDistance, out Vector3 dest);
-
-                        agent.SetDestination(dest);
-                    }
-
-                    if (idleTimer <= 0)
-                    {
-                        state = State.IDLE;
-
-                        agent.isStopped = true;
-
-                        animator.SetTrigger("idleInterrupt");
-                    }
-                    
+                    agent.speed = chaseSpeed;
+                    state = State.IDLE;
+                    chargeTimer = chargeTime;
+                    agent.stoppingDistance = 3;
                 }
                 break;
             case State.IDLE:
                 if(target != null)
                 {
                     state = State.CHASE;
-                    break;
-                }
-                if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !animator.IsInTransition(0))
-                {
+                    animator.SetBool("Idle", false);
                     agent.isStopped = false;
-                    state = State.WANDER;
-                    idleTimer = idleTime;
+                }
+                else
+                {
+                    agent.isStopped = true;
+                    animator.SetBool("Idle", true);
                 }
                 break;
             case State.CHASE:
@@ -110,16 +91,23 @@ public class Enemy : MonoBehaviour
                     agent.SetDestination(target.position);
                     agent.speed = chaseSpeed;
 
-                    if(agent.remainingDistance <= agent.stoppingDistance)
+                    chargeTimer -= Time.deltaTime;
+
+                    if(chargeTimer <= 0)
+                    {
+                        state = State.CHARGE;
+                        //Vector3 dir = (transform.position - target.position).normalized * 3;
+                        //Vector3 targetPos = target.position + dir;
+                        //agent.SetDestination(targetPos);
+                    }
+                    else if(agent.remainingDistance <= agent.stoppingDistance)
                     {
                         state = State.ATTACK;
-                        
                     }
                 }
-                else
+                else 
                 {
-                    state = State.WANDER;
-                    idleTimer = idleTime;
+                    state = State.IDLE;
                 }
                 break;
             case State.ATTACK:
@@ -136,8 +124,6 @@ public class Enemy : MonoBehaviour
                 {
                     inRange = false;
                 }
-
-                animator.SetBool("inRange", inRange);
 
                 if (inRange)
                 {
@@ -158,9 +144,7 @@ public class Enemy : MonoBehaviour
                 {
                     if (target == null)
                     {
-                        state = State.WANDER;
-                        idleTimer = idleTime;
-                        agent.isStopped = false;
+                        state = State.IDLE;
                     }
                     else
                     {
@@ -233,5 +217,24 @@ public class Enemy : MonoBehaviour
     {
         AudioClip clip = stepSounds[UnityEngine.Random.Range(0, stepSounds.Length)];
         audioSource.PlayOneShot(clip);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.gameObject.CompareTag("Player"))
+        {
+            if(state == State.CHARGE)
+            {
+                Rigidbody rb = collision.collider.gameObject.GetComponent<Rigidbody>();
+
+                Vector3 collisionPoint = collision.collider.ClosestPoint(transform.position);
+
+                Vector3 forceDirection = (collisionPoint - transform.position).normalized;
+
+                Vector3 force = forceDirection * (chargeSpeed * 0.75f);
+
+                rb.AddForce(force, ForceMode.Impulse);
+            }
+        }
     }
 }
