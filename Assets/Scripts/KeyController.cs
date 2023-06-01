@@ -13,8 +13,8 @@ public class KeyController : MonoBehaviour
 
     [SerializeField] private Interactable interactable;
     [SerializeField] private AudioSource? audioSource = null;
-    [SerializeField] TMP_Text messageText;
-    [SerializeField] GameObject interactText;
+    [SerializeField] public TMP_Text messageText;
+    [SerializeField] public GameObject interactText;
     
 
     private void Start()

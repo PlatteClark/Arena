@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,6 +11,11 @@ public class Minotaur : MonoBehaviour
 
     [SerializeField] float health;
     [SerializeField] GameObject ragdoll;
+
+    [Header("Key")]
+    [SerializeField] GameObject KeyDrop;
+    [SerializeField] GameObject interactTxt;
+    [SerializeField] TMP_Text message_text;
 
     [Header("Perception")]
     [SerializeField] int raycasts;
@@ -202,6 +208,11 @@ public class Minotaur : MonoBehaviour
         if(health <= 0)
         {
             GameObject go = Instantiate(ragdoll, transform.position, transform.rotation);
+            GameObject key = Instantiate(KeyDrop, transform.position, transform.rotation);
+            key.gameObject.GetComponent<Interactable>().interactionPrompt = interactTxt;
+            KeyController keyController = key.GetComponent<KeyController>();
+            keyController.messageText = message_text;
+            keyController.interactText = interactTxt;
             var rbs = go.GetComponentsInChildren<Rigidbody>();
 
             foreach (var rb in rbs)
