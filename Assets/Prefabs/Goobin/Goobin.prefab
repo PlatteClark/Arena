@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 4415567063995773196}
   - component: {fileID: 4301518677571943854}
   - component: {fileID: 1038826050347123636}
+  - component: {fileID: 1354357569158177627}
+  - component: {fileID: 8494520177843992914}
   m_Layer: 8
   m_Name: Goobin
   m_TagString: Enemy
@@ -133,9 +135,12 @@ MonoBehaviour:
   attackTime: 2
   idleTime: 5
   wanderDistance: 8
-  animator: {fileID: 5008464895465421555}
+  animator: {fileID: 8494520177843992914}
   wanderSpeed: 1.5
   chaseSpeed: 3.5
+  stepSounds:
+  - {fileID: 8300000, guid: ae934fcf13ff5cc4684a1d7f5ab679d0, type: 3}
+  - {fileID: 8300000, guid: af194fc6a509aab42949ab2eb4e2ed5b, type: 3}
 --- !u!195 &1038826050347123636
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -158,6 +163,123 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!82 &1354357569158177627
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4350218828333872528}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 15
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!95 &8494520177843992914
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4350218828333872528}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
+  m_Controller: {fileID: 9100000, guid: 73fd9865148cffd4382c5e845104a541, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7168306988728257821
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +571,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -457,10 +580,5 @@ PrefabInstance:
 --- !u!4 &1396547570863906953 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
-  m_PrefabInstance: {fileID: 1507353341380413282}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &5008464895465421555 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
   m_PrefabInstance: {fileID: 1507353341380413282}
   m_PrefabAsset: {fileID: 0}

@@ -10,6 +10,9 @@ public class FlailHead : MonoBehaviour
     Rigidbody rb;
     Rigidbody handlerb;
 
+    private AudioSource audioSource;
+    [SerializeField] AudioClip[] impactSounds;
+
     public bool swing = false;
     float timer = 0;
 
@@ -18,6 +21,7 @@ public class FlailHead : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         handlerb = handle.GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -57,6 +61,8 @@ public class FlailHead : MonoBehaviour
 
         if (other.gameObject.CompareTag("Enemy"))
         {
+            PlaySounds();
+
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
 
             forceDirection = (other.transform.position - transform.position).normalized;
@@ -70,5 +76,10 @@ public class FlailHead : MonoBehaviour
                 enemy.TakeDamage(rb.velocity.magnitude, force);
             }
         }
+    }
+    public void PlaySounds()
+    {
+        AudioClip clip = impactSounds[UnityEngine.Random.Range(0, impactSounds.Length)];
+        audioSource.PlayOneShot(clip);
     }
 }

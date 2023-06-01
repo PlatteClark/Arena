@@ -143,7 +143,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.27315915
+        functionName: PlayStepSounds
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ab80043c30bb18e4fb6af13caed0cd48, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.80047506
+        functionName: PlayStepSounds
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ab80043c30bb18e4fb6af13caed0cd48, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -201,7 +215,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.6256943
+        functionName: PlayStepSounds
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ab80043c30bb18e4fb6af13caed0cd48, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.98574823
+        functionName: PlayStepSounds
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ab80043c30bb18e4fb6af13caed0cd48, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

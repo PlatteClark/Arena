@@ -29,7 +29,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] float wanderSpeed;
     [SerializeField] float chaseSpeed;
 
-
+    private AudioSource audioSource;
+    [SerializeField] AudioClip[] stepSounds;
     bool inRange = false;
     float attackTimer;
     float idleTimer;
@@ -48,6 +49,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
 
         attackTimer = attackTime;
         idleTimer = idleTime;
@@ -225,5 +227,11 @@ public class Enemy : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+
+    public void PlayStepSounds()
+    {
+        AudioClip clip = stepSounds[UnityEngine.Random.Range(0, stepSounds.Length)];
+        audioSource.PlayOneShot(clip);
     }
 }
