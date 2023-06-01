@@ -12,6 +12,7 @@ public class PlayerMovment : MonoBehaviour
     [SerializeField] float rotationSpeed = 75;
     [SerializeField] float speed = 3;
     [SerializeField] float jumpForce = 5f;
+    [SerializeField] float health = 5f;
     private bool isGrounded = true;
 
     public List<string> dungeonKeys;
@@ -28,6 +29,7 @@ public class PlayerMovment : MonoBehaviour
     private bool isMoving = false;
     private bool isCoroutinePlaying = false;
     private bool isInWater = false;
+    
 
     void Start()
     {
@@ -215,4 +217,8 @@ public class PlayerMovment : MonoBehaviour
         isCoroutinePlaying = false;
     }
 
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+    }
 }
