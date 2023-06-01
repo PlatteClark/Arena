@@ -108,7 +108,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Run
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2125321286603049923}
@@ -124,7 +124,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1303299601406483602, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
+  m_Motion: {fileID: 8349542763059015795, guid: 82fe05dfc09908045a85e395c1bcd133, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -154,7 +154,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -4799524434163024911, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
+  m_Motion: {fileID: 8349542763059015795, guid: 82fe05dfc09908045a85e395c1bcd133, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -367,7 +367,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 4723146814002874508, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
+  m_Motion: {fileID: -1870079012716061938, guid: 82fe05dfc09908045a85e395c1bcd133, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -395,7 +395,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -2969562917315777557, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
+  m_Motion: {fileID: -8945691123924629249, guid: 82fe05dfc09908045a85e395c1bcd133, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -574,7 +574,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -1469241387857238817, guid: db4950b2b256bdc489c312e5e7897323, type: 3}
+  m_Motion: {fileID: -2212956986332448364, guid: 82fe05dfc09908045a85e395c1bcd133, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
