@@ -19,7 +19,6 @@ public class Interactable : MonoBehaviour
 
     public bool Interact(List<string> keys)
     {
-        Debug.Log("Interacted with the object!");
         OnInteract?.Invoke(keys);
 
         return true;

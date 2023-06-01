@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ public class Enemy : MonoBehaviour
 {
     NavMeshAgent agent;
     Transform target;
+
+    [SerializeField] float health;
+    [SerializeField] GameObject ragdoll;
 
     [Header("Perception")]
     [SerializeField] int raycasts;
@@ -53,8 +57,6 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         Perceive();
-
-        Debug.Log(state.ToString());
 
         switch(state)
         {
@@ -206,5 +208,22 @@ public class Enemy : MonoBehaviour
         }
 
         target = null;
+    }
+
+    public void TakeDamage(float damage, Vector3 force)
+    {
+        health -= damage;
+        if(health <= 0)
+        {
+            GameObject go = Instantiate(ragdoll, transform.position, transform.rotation);
+            var rbs = go.GetComponentsInChildren<Rigidbody>();
+
+            foreach (var rb in rbs)
+            {
+                rb.AddForce(force, ForceMode.Impulse);
+            }
+
+            Destroy(gameObject);
+        }
     }
 }

@@ -44,15 +44,31 @@ public class FlailHead : MonoBehaviour
     {
         Rigidbody otherRb = other.GetComponent<Rigidbody>();
 
+        Vector3 collisionPoint = other.ClosestPoint(transform.position);
+
+        Vector3 forceDirection = (collisionPoint - transform.position).normalized;
+
+        Vector3 force = forceDirection * rb.velocity.magnitude;
+
         if (otherRb != null)
         {
-            Vector3 collisionPoint = other.ClosestPoint(transform.position);
+            otherRb.AddForce(force, ForceMode.Impulse);       
+        }
 
-            Vector3 forceDirection = (collisionPoint - transform.position).normalized;
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
 
-            Vector3 force = forceDirection * rb.velocity.magnitude;
+            forceDirection = (other.transform.position - transform.position).normalized;
 
-            otherRb.AddForce(force, ForceMode.Impulse);
+            forceDirection += new Vector3( 1, 2.5f, 1);
+
+            force = forceDirection * rb.velocity.magnitude;
+
+            if (enemy != null)
+            {
+                enemy.TakeDamage(rb.velocity.magnitude, force);
+            }
         }
     }
 }
